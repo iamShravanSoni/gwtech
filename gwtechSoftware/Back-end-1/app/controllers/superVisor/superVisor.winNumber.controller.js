@@ -4,7 +4,25 @@ const WinningNumber = db.winningNumber;
 exports.readWinningNumber = async (req, res) => {
   try {
     const { lotteryCategoryName, fromDate, toDate } = req.body;
+
+    //console req.body
+    console.log("Request Body:", req.body);
+
+
+    // Log the dates to see if they are received correctly
+    console.log("From Date:", fromDate, "To Date:", toDate);
+
     let winningNumber = null;
+
+    // Ensure that the fromDate and toDate received from the frontend are correctly formatted as Date objects before passing them into the MongoDB query.
+    const startDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+
+    //console the from date and to date
+    console.log("From Date (converted):", startDate);
+    console.log("To Date (converted):", endDate);
+
+
     if (lotteryCategoryName == "") {
       winningNumber = await WinningNumber.find({
         date: { $gte: fromDate, $lte: toDate },
@@ -15,6 +33,9 @@ exports.readWinningNumber = async (req, res) => {
         date: { $gte: fromDate, $lte: toDate },
       }).sort({ date: 1 });
     }
+
+    // Log the fetched winning numbers to see the result
+    console.log("Winning Numbers:", winningNumber);
 
     if (winningNumber.length == 0) {
       return res.send({ success: false, message: "Winning number not found" });

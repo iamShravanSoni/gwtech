@@ -48,12 +48,22 @@ const WinNumber = () => {
   const fetchWinningNumbers = async () => {
     try {
       setLoading(true);
+
+      // Log the payload
+    console.log("Payload:", {
+      fromDate,
+      toDate,
+    });
+
       const response = await api().post("superVisor/getwiningnumber", {
         lotteryCategoryName: "",
         fromDate,
         toDate,
       });
-      console.log(response.data.data);
+
+      // Log the API response data  
+      console.log("API Response:", response.data);
+
       setWinningNumbers(response.data.data);
     } catch (error) {
       console.error(error);
@@ -67,6 +77,12 @@ const WinNumber = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+  console.log("From Date:", fromDate);
+  console.log("To Date:", toDate);
+}, [fromDate, toDate]);
+
 
   const formatDate = (dateString) => {
     const parts = dateString.split("-");
